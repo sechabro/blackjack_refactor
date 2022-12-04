@@ -41,7 +41,7 @@ class BlackjackPerson(Deck):
         return self.hand_value
 
     def __facecardnumvalueadd__(self):
-        for value in self._hand:
+        for value in self.hand:
             for face in 'Jack Queen King'.split():
                 while len(value) == 2:
                     if face in value:
@@ -88,10 +88,13 @@ class Player(BlackjackPerson):
 
     def __handsplit__(self):
         if self.hit_count == 2:
-            card_1 = self.hand[0][0]
-            card_2 = self.hand[1][0]
+            card_1 = self.hand[0]
+            card_2 = self.hand[1]
             try:
-                assert card_1 == card_2
+                assert card_1[0] == card_2[0]
+                self.multi_hand.append([card_1])
+                self.multi_hand.append([card_2])
+                self.hand = self.multi_hand
             except AssertionError:
                 print('No matching values.')
         else:

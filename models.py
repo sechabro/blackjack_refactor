@@ -19,28 +19,18 @@ class Deck:
 
 class BlackjackPerson(Deck):
 
-    def __init__(self, hand, hit_count, hand_value, *args):
-        self._hand = hand
-        self._hit_count = hit_count
-        self._hand_value = hand_value
+    def __init__(self):
+        self._hand = []
+        self._hit_count = 0
+        self._hand_value = 0
 
-    @property
-    def hit_count(self):
-        return self._hit_count
-
-    @hit_count.setter
-    def hit_count(self):
+    def __hit_count__(self):
         if self._hand != []:
             for _ in range(1, len(self._hand)+1):
                 self._hit_count += 1
 
-    @property
-    def hand_value(self):
-        return self._hand_value
-
-    @hand_value.setter
-    def hand_value(self):
-        self._hand_value = sum(int(value[0]) for value in self.hand)
+    def __hand_value__(self):
+        self._hand_value = sum(int(value[0]) for value in self._hand)
 
     def __hit__(self):
         randomcard = choice(Deck.cards)
@@ -50,7 +40,7 @@ class BlackjackPerson(Deck):
         return
 
     def __facecardnumvalueadd__(self):
-        for card in self.hand:
+        for card in self._hand:
             for face in 'Jack Queen King'.split():
                 while len(card) == 2:
                     if face in card:

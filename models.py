@@ -34,7 +34,7 @@ class BlackjackPerson(Deck):
         print('Your Hand:')
         for card in self.hand:
             print(f'{card[-2]} of {card[-1]}')
-        print(self.hand_value)
+        print(f'Hand Value: {self.hand_value}')
 
     def __hit__(self):
         randomcard = choice(Deck.cards)

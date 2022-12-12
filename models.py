@@ -20,27 +20,25 @@ class Deck:
 class BlackjackPerson(Deck):
 
     def __init__(self):
-        self._hand = []
-        self._hit_count = 0
-        self._hand_value = 0
+        self.hand = []
+        self.hit_count = 0
+        self.hand_value = 0
 
     def __hit_count__(self):
-        if self._hand != []:
-            for _ in range(1, len(self._hand)+1):
-                self._hit_count += 1
+        self.hit_count = len(self.hand) if self.hand != [] else 0
 
     def __hand_value__(self):
-        self._hand_value = sum(int(value[0]) for value in self._hand)
+        self.hand_value = sum(int(value[0]) for value in self.hand)
 
     def __hit__(self):
         randomcard = choice(Deck.cards)
-        self._hand.append(randomcard)
+        self.hand.append(randomcard)
         Deck.cards.remove(randomcard)
         print(f"you drew: {randomcard}")
         return
 
     def __facecardnumvalueadd__(self):
-        for card in self._hand:
+        for card in self.hand:
             for face in 'Jack Queen King'.split():
                 while len(card) == 2:
                     if face in card:
@@ -51,7 +49,7 @@ class BlackjackPerson(Deck):
 
     def __acevaluerefactor__(self):
         while self.hand_value > 21:
-            for value in self._hand:
+            for value in self.hand:
                 if value[0] == '11':
                     value[0] = '1'
                     self.__calculatehand__()
@@ -75,7 +73,7 @@ class Dealer(BlackjackPerson):
             self.__hit__()
             self.__facecardnumvalueadd__()
             self.__acevaluerefactor__()
-            self.__calculatehand__()
+            self.__hand_value__()
         else:
             pass
 
@@ -85,6 +83,8 @@ class Player(BlackjackPerson):
     def __init__(self):
         super().__init__()
         self.multihand = []
+        self.multihitcount = []
+        self.multihandvalue = []
 
     def __handsplit__(self):
         if self.hit_count == 2:
@@ -95,11 +95,27 @@ class Player(BlackjackPerson):
                 for card in self.hand:
                     self.multihand.append([card])
                 self.hand = self.multihand
-                self.hit_count = 1
+                self.hit_count = None
             except AssertionError:
                 print('No matching values.')
         else:
             pass
+
+    def __multisplit__(self):
+        for hit_count in self.multihitcount:
+            if hit_count == 2:
+                for each_hand in self.multihand:
+                    each_card_1 = each_hand[0]
+                    each_card_2 = each_hand[1]
+                    try:
+                        assert each_card_1[0] == each_card_2[0]
+                        self.multihand.append([each_card_1])
+                        each_hand.remove(each_card_1)
+                        self.hand = self.multihand
+                    except AssertionError:
+                        print('No doubles...')
+            else:
+                pass
 
     def __multihit__(self):
         for hand in self.hand:
@@ -118,38 +134,3 @@ class Player(BlackjackPerson):
                     elif 'Ace' in card:
                         card.insert(0, '11')
                     break
-
-
-# *args
-# def initialize():
-#     d = Deck()
-#     b = BlackjackPerson()
-#     p = Player()
-#     p.__getitem__(44)
-#     p.__getitem__(44)
-#     p.__facecardnumvalueadd__()
-#     p.__hitcounter__()
-#     p.__handsplit__()
-#     print(p.hand)
-#     p.__multihit__()
-#     print(p.hand)
-#     p.__facecardnumvalueadd__()
-#     print(p.hand)
-
-# d = Deck()
-# b = BlackjackPerson()
-# de = Dealer()
-
-
-# def DealerPlay():
-    # de.__calculatehand__()
-    # de.__valuewatch__()
-    # print(de.hand)
-
-
-# DealerPlay()
-# d = Deck()
-# b = BlackjackPerson()
-# de = Dealer()
-# p = Player()
-# initialize()

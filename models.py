@@ -30,6 +30,12 @@ class BlackjackPerson(Deck):
     def __hand_value__(self):
         self.hand_value = sum(int(value[0]) for value in self.hand)
 
+    def __str__(self):
+        print('Your Hand:')
+        for card in self.hand:
+            print(f'{card[-2]} of {card[-1]}')
+        print(self.hand_value)
+
     def __hit__(self):
         randomcard = choice(Deck.cards)
         self.hand.append(randomcard)
@@ -97,7 +103,7 @@ class Player(BlackjackPerson):
                 self.hand = self.multihand
                 self.hit_count = None
             except AssertionError:
-                print('No matching values.')
+                print('No doubles...')
         else:
             pass
 

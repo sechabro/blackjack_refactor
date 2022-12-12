@@ -22,7 +22,7 @@ class BlackjackPerson(Deck):
     def __init__(self, hand, hit_count, hand_value, *args):
         self._hand = hand
         self._hit_count = hit_count
-        self.hand_value = hand_value
+        self._hand_value = hand_value
 
     @property
     def hit_count(self):
@@ -34,20 +34,20 @@ class BlackjackPerson(Deck):
             for _ in range(1, len(self._hand)+1):
                 self._hit_count += 1
 
+    @property
+    def hand_value(self):
+        return self._hand_value
+
+    @hand_value.setter
+    def hand_value(self):
+        self._hand_value = sum(int(value[0]) for value in self.hand)
+
     def __hit__(self):
         randomcard = choice(Deck.cards)
         self._hand.append(randomcard)
         Deck.cards.remove(randomcard)
         print(f"you drew: {randomcard}")
         return
-
-    def __showhand__(self):
-        return self._hand, self._hand_value
-
-    def __calculatehand__(self):
-        self.hand_value = sum(int(value[0]) for value in self.hand)
-        #self.hand_value = self._hand_value
-        return self.hand_value
 
     def __facecardnumvalueadd__(self):
         for card in self.hand:

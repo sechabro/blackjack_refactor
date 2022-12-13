@@ -13,7 +13,7 @@ class Deck:
         ranks = [str(n) for n in range(2, 11)] + 'Jack Queen King Ace'.split()
         suits = 'Spades Diamonds Clubs Hearts'.split()
         cls.cards = [[rank, suit] for rank in ranks for suit in suits]
-        shuffle(cls.cards)
+        # shuffle(cls.cards)
         return cls.cards
 
 
@@ -130,6 +130,21 @@ class Player(BlackjackPerson):
             Deck.cards.remove(randomcard)
             print(f"you drew: {randomcard}")
 
+    def __multihitcount__(self):
+        self.multihitcount.clear()
+        for hand in self.hand:
+            hand_hit_count = len(hand)
+            self.multihitcount.append(hand_hit_count)
+
+    def __multihandvaluecount__(self):
+        self.multihandvalue.clear()
+        for hand in self.hand:
+            value = 0
+            for card in hand:
+                card_value = int(card[0])
+                value += card_value
+            self.multihandvalue.append(value)
+
     def __multifacecardnumvalueadd__(self):
         face = 'Jack Queen King'.split()
         for hand in self.hand:
@@ -139,4 +154,16 @@ class Player(BlackjackPerson):
                         card.insert(0, '10')
                     elif 'Ace' in card:
                         card.insert(0, '11')
+                    break
+
+    def __multiacevaluerefactor__(self):
+        for hand in self.hand:
+            for value in self.multihandvalue:
+                while value > 21:
+                    for card in hand:
+                        if card[0] == '11':
+                            card[0] = '1'
+                            value = sum(int(card[0]) for card in hand)
+                        else:
+                            continue
                     break

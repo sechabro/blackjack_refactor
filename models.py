@@ -1,20 +1,56 @@
 """Model for a deck of cards"""
 from random import choice, shuffle
 import itertools
+from typing import List
 
 
 class Deck:
 
     def __init__(self):
-        self.cards = Deck.__createdeck__()
-
-    @classmethod
-    def __createdeck__(cls):
         ranks = [str(n) for n in range(2, 11)] + 'Jack Queen King Ace'.split()
         suits = 'Spades Diamonds Clubs Hearts'.split()
-        cls.cards = [[rank, suit] for rank in ranks for suit in suits]
-        # shuffle(cls.cards)
-        return cls.cards
+        deck = [[rank, suit] for rank in ranks for suit in suits]
+        shuffle(deck)
+        self.cards = [card for card in deck]
+        self.card = []
+
+    def __card__(self):
+        card = self.cards[0]
+        self.card = card
+        self.cards.remove(card)
+
+    def __facecardnumvalueadd__(self):
+        face = 'Jack Queen King'.split()
+        if self.card[0] in face:
+            self.card.insert(0, '10')
+        elif self.card[0] == 'Ace':
+            self.card.insert(0, '11')
+        else:
+            return False
+
+# class Hand(Deck):
+#     def __init__(self, max=21) -> None:
+#         super().__init__()
+#         self.hand: List[list] = []
+#         self.handvalue: int
+#         self.hitcount: int
+
+#     def hit(self, card: list):
+#         card = choice(self.cards)
+#         self.hand.append(card)
+
+#     def handvalue(self) -> int:
+#         value = 0
+#         for card in self.hand:
+#             value += int(card[0])
+#         return value
+
+#     def hitcount(self) -> int:
+#         return len(self.hand)
+
+#     def valuecheck(self):
+#         if self.handvalue > self.max:
+#             print('You lose!')
 
 
 class BlackjackPerson(Deck):
@@ -46,17 +82,6 @@ class BlackjackPerson(Deck):
             Deck.cards.remove(randomcard)
             print(f"you drew: {randomcard}")
 
-    def __facecardnumvalueadd__(self):
-        face = 'Jack Queen King'.split()
-        for hand in self.hand:
-            for card in hand:
-                while len(card) == 2:
-                    if card[0] in face:
-                        card.insert(0, '10')
-                    elif card[0] == 'Ace':
-                        card.insert(0, '11')
-                    break
-
     def __acevaluerefactor__(self):
         for hand in self.hand:
             for value in self.handvalue:
@@ -74,12 +99,6 @@ class BlackjackPerson(Deck):
         for card in self.hand:
             print(f'{card[-2]} of {card[-1]}')
         print(f'Hand Value: {self.hand_value}')
-
-    def __getitem__(self, position):
-        for hand in self.hand:
-            pick = Deck.cards[position]
-            hand.append(pick)
-            Deck.cards.remove(pick)
 
 
 class Dealer(BlackjackPerson):

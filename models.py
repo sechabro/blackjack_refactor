@@ -5,134 +5,102 @@ from typing import List
 
 
 class Deck:
+    cards = []
+    card = []
 
-    def __init__(self):
+    @classmethod
+    def __deck__(cls):
         ranks = [str(n) for n in range(2, 11)] + 'Jack Queen King Ace'.split()
         suits = 'Spades Diamonds Clubs Hearts'.split()
         deck = [[rank, suit] for rank in ranks for suit in suits]
         shuffle(deck)
-        self.cards = [card for card in deck]
-        self.card = []
+        Deck.cards = [card for card in deck]
 
-    def __card__(self):
-        card = self.cards[0]
-        self.card = card
-        self.cards.remove(card)
+    @classmethod
+    def __card__(cls):
+        card = cls.cards[0]
+        cls.card = card
+        cls.cards.remove(card)
 
-    def __facecardnumvalueadd__(self):
+    @classmethod
+    def __facecardnumvalueadd__(cls):
         face = 'Jack Queen King'.split()
-        if self.card[0] in face:
-            self.card.insert(0, '10')
-        elif self.card[0] == 'Ace':
-            self.card.insert(0, '11')
+        if cls.card[0] in face:
+            cls.card.insert(0, '10')
+        elif cls.card[0] == 'Ace':
+            cls.card.insert(0, '11')
         else:
             return False
-
-# class Hand(Deck):
-#     def __init__(self, max=21) -> None:
-#         super().__init__()
-#         self.hand: List[list] = []
-#         self.handvalue: int
-#         self.hitcount: int
-
-#     def hit(self, card: list):
-#         card = choice(self.cards)
-#         self.hand.append(card)
-
-#     def handvalue(self) -> int:
-#         value = 0
-#         for card in self.hand:
-#             value += int(card[0])
-#         return value
-
-#     def hitcount(self) -> int:
-#         return len(self.hand)
-
-#     def valuecheck(self):
-#         if self.handvalue > self.max:
-#             print('You lose!')
 
 
 class BlackjackPerson(Deck):
 
     def __init__(self):
-        self.hand = [[]]
-        self.hitcount = []
-        self.handvalue = []
-
-    def __hitcount__(self):
-        self.hitcount.clear()
-        for hand in self.hand:
-            hand_hit_count = len(hand)
-            self.hitcount.append(hand_hit_count)
-
-    def __handvaluecount__(self):
-        self.handvalue.clear()
-        for hand in self.hand:
-            value = 0
-            for card in hand:
-                card_value = int(card[0])
-                value += card_value
-            self.handvalue.append(value)
+        hand_count = 1
+        empty_hand = {
+            "cards": [],
+            "hand_value": 0,
+            "hit_count": 0
+        }
+        self.hand = [empty_hand]
 
     def __hit__(self):
         for hand in self.hand:
-            randomcard = choice(Deck.cards)
-            hand.append(randomcard)
-            Deck.cards.remove(randomcard)
-            print(f"you drew: {randomcard}")
+            hand["cards"].append(Deck.card)
+            print(f"you drew: {Deck.card}")
+            Deck.__card__()
 
-    def __acevaluerefactor__(self):
+#     def __handvaluecount__(self):
+#         self.handvalue.clear()
+#         for hand in self.hand:
+#             value = 0
+#             for card in hand:
+#                 card_value = int(card[0])
+#                 value += card_value
+#             self.handvalue.append(value)
+
+    def __hitcount__(self):
         for hand in self.hand:
-            for value in self.handvalue:
-                while value > 21:
-                    for card in hand:
-                        if card[0] == '11':
-                            card[0] = '1'
-                            value = sum(int(card[0]) for card in hand)
-                        else:
-                            continue
-                    break
+            cards = [card for card in hand["cards"]]
+            hand["hit_count"] = len(cards)
 
-    def __str__(self):
-        print('Your Hand:')
-        for card in self.hand:
-            print(f'{card[-2]} of {card[-1]}')
-        print(f'Hand Value: {self.hand_value}')
+        #     def __str__(self):
+        #         print('Your Hand:')
+        #         for card in self.hand:
+        #             print(f'{card[-2]} of {card[-1]}')
+        #         print(f'Hand Value: {self.hand_value}')
 
+        # class Dealer(BlackjackPerson):
 
-class Dealer(BlackjackPerson):
+        #     def __init__(self):
+        #         super().__init__()
 
-    def __init__(self):
-        super().__init__()
+        #     def __valuewatch__(self):
+        #         if self.handvalue < 17:
+        #             self.__hit__()
+        #             self.__facecardnumvalueadd__()
+        #             self.__acevaluerefactor__()
+        #             self.__handvaluecount__()
+        #         else:
+        #             pass
 
-    def __valuewatch__(self):
-        if self.handvalue < 17:
-            self.__hit__()
-            self.__facecardnumvalueadd__()
-            self.__acevaluerefactor__()
-            self.__handvaluecount__()
-        else:
-            pass
+        # class Player(BlackjackPerson):
 
+        #     def __init__(self):
+        #         super().__init__()
+        #         self.multihand = []
 
-class Player(BlackjackPerson):
-
-    def __init__(self):
-        super().__init__()
-        self.multihand = []
-
-    def __handsplit__(self):
-        for hit_count in self.hitcount:
-            if hit_count == 2:
-                for hand in self.hand:
-                    card_1 = hand[0]
-                    card_2 = hand[1]
-                    try:
-                        assert card_1[0] == card_2[0]
-                        for card in hand:
-                            self.multihand.append([card])
-                        self.hand = self.multihand
-                        self.hit_count = None
-                    except AssertionError:
-                        print('No doubles...')
+        #     def __handsplit__(self):
+        #         for hit_count in self.hitcount:
+        #             if hit_count == 2:
+        #                 for hand in self.hand:
+        #                     card_1 = hand[0]
+        #                     card_2 = hand[1]
+        #                     try:
+        #                         assert card_1[0] == card_2[0]
+        #                         for card in hand:
+        #                             self.multihand.append([card])
+        #                         self.hand = self.multihand
+        #                         self.hit_count = None
+        #                     except AssertionError:
+        #                         print('No doubles...')

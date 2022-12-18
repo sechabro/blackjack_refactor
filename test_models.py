@@ -1,23 +1,42 @@
-from models import Deck
+from models import Deck, BlackjackPerson
 import itertools
 
 
 def test_deck_length():
-    d = Deck()
-    assert len(d.cards) == 52
+    Deck.__deck__()
+    assert len(Deck.cards) == 52
 
 
 def test_facecardnumvalueadd_functionality():
-    d = Deck()
-    iter_deck = iter(d.cards)
+    Deck.__deck__()
+    iter_deck = iter(Deck.cards)
     next_card = None
     faces = 'Jack Queen King Ace'.split()
     while True:
         next_card = next(iter_deck)
         if next_card[0] in faces:
-            d.card = next_card
-            d.__facecardnumvalueadd__()
-            assert len(d.card) == 3
+            Deck.card = next_card
+            Deck.__facecardnumvalueadd__()
+            assert len(Deck.card) == 3
             break
         else:
+            print(len(Deck.card))
             continue
+
+
+def test_BlackjackPerson_hit_functionality():
+    Deck.__deck__()
+    Deck.__card__()
+    b = BlackjackPerson()
+    b.__hit__()
+    assert b.hand[0]["cards"][0] != Deck.card
+
+
+def test_BlackjackPerson_hitcount():
+    Deck.__deck__()
+    Deck.__card__()
+    b = BlackjackPerson()
+    b.__hit__()
+    b.__hit__()
+    b.__hitcount__()
+    assert len(b.hand[0]["cards"]) == b.hand[0]["hit_count"]

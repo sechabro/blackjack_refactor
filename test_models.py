@@ -37,6 +37,20 @@ def test_BlackjackPerson_hitcount():
     Deck.__card__()
     b = BlackjackPerson()
     b.__hit__()
+    Deck.__facecardnumvalueadd__()
     b.__hit__()
     b.__hitcount__()
     assert len(b.hand[0]["cards"]) == b.hand[0]["hit_count"]
+
+
+def test_BlackjackPerson_handvalue():
+    Deck.__deck__()
+    Deck.__card__()
+    Deck.__facecardnumvalueadd__()
+    b = BlackjackPerson()
+    b.__hit__()
+    Deck.__facecardnumvalueadd__()
+    b.__hit__()
+    b.__handvaluecount__()
+    assert sum(int(card[0]) for card in b.hand[0]
+               ["cards"]) == b.hand[0]["hand_value"]

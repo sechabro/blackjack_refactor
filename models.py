@@ -50,14 +50,11 @@ class BlackjackPerson(Deck):
             print(f"you drew: {Deck.card}")
             Deck.__card__()
 
-#     def __handvaluecount__(self):
-#         self.handvalue.clear()
-#         for hand in self.hand:
-#             value = 0
-#             for card in hand:
-#                 card_value = int(card[0])
-#                 value += card_value
-#             self.handvalue.append(value)
+    def __handvaluecount__(self):
+        for hand in self.hand:
+            cards = [card for card in hand["cards"]]
+            value = sum(int(card[0]) for card in cards)
+            hand["hand_value"] = value
 
     def __hitcount__(self):
         for hand in self.hand:

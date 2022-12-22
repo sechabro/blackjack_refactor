@@ -32,6 +32,12 @@ class Deck:
         else:
             return False
 
+    @classmethod
+    def __cardchoice__(cls, position):
+        card = cls.cards[position]
+        cls.card = card
+        cls.cards.remove(card)
+
 
 class BlackjackPerson(Deck):
 
@@ -61,25 +67,36 @@ class BlackjackPerson(Deck):
             cards = [card for card in hand["cards"]]
             hand["hit_count"] = len(cards)
 
+    def __acevaluerefactor__(self):
+        for hand in self.hand:
+            cards = [card for card in hand["cards"]]
+            for card in cards:
+                while hand["hand_value"] > 21:
+                    if card[0] == '11':
+                        card[0] = '1'
+                    value = sum(int(card[0]) for card in cards)
+                    hand["hand_value"] = value
+
         #     def __str__(self):
         #         print('Your Hand:')
         #         for card in self.hand:
         #             print(f'{card[-2]} of {card[-1]}')
         #         print(f'Hand Value: {self.hand_value}')
 
-        # class Dealer(BlackjackPerson):
 
-        #     def __init__(self):
-        #         super().__init__()
+class Dealer(BlackjackPerson):
 
-        #     def __valuewatch__(self):
-        #         if self.handvalue < 17:
-        #             self.__hit__()
-        #             self.__facecardnumvalueadd__()
-        #             self.__acevaluerefactor__()
-        #             self.__handvaluecount__()
-        #         else:
-        #             pass
+    def __init__(self):
+        super().__init__()
+
+    def __valuewatch__(self):
+        if self.handvalue < 17:
+            self.__hit__()
+            self.__facecardnumvalueadd__()
+            self.__acevaluerefactor__()
+            self.__handvaluecount__()
+        else:
+            pass
 
         # class Player(BlackjackPerson):
 

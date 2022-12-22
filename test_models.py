@@ -54,3 +54,11 @@ def test_BlackjackPerson_handvalue():
     b.__handvaluecount__()
     assert sum(int(card[0]) for card in b.hand[0]
                ["cards"]) == b.hand[0]["hand_value"]
+
+
+def test_BlackjackPerson_acevaluerefactor():
+    b = BlackjackPerson()
+    b.hand = [{'cards': [['11', 'Ace', 'Hearts'], [
+        '11', 'Ace', 'Clubs']], 'hand_value': 22, 'hit_count': 2}]
+    b.__acevaluerefactor__()
+    assert b.hand[0]["hand_value"] == 12

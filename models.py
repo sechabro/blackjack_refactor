@@ -71,17 +71,12 @@ class BlackjackPerson(Deck):
         for hand in self.hand:
             cards = [card for card in hand["cards"]]
             for card in cards:
-                while hand["hand_value"] > 21:
-                    if card[0] == '11':
-                        card[0] = '1'
+                if hand["hand_value"] > 21 and card[0] == '11':
+                    card[0] = '1'
                     value = sum(int(card[0]) for card in cards)
                     hand["hand_value"] = value
-
-        #     def __str__(self):
-        #         print('Your Hand:')
-        #         for card in self.hand:
-        #             print(f'{card[-2]} of {card[-1]}')
-        #         print(f'Hand Value: {self.hand_value}')
+                else:
+                    print('No aces to refactor')
 
 
 class Dealer(BlackjackPerson):
@@ -90,7 +85,7 @@ class Dealer(BlackjackPerson):
         super().__init__()
 
     def __valuewatch__(self):
-        if self.handvalue < 17:
+        if self.hand[0]["hand_value"] < 17:
             self.__hit__()
             self.__facecardnumvalueadd__()
             self.__acevaluerefactor__()
@@ -98,23 +93,24 @@ class Dealer(BlackjackPerson):
         else:
             pass
 
-        # class Player(BlackjackPerson):
 
-        #     def __init__(self):
-        #         super().__init__()
-        #         self.multihand = []
+class Player(BlackjackPerson):
 
-        #     def __handsplit__(self):
-        #         for hit_count in self.hitcount:
-        #             if hit_count == 2:
-        #                 for hand in self.hand:
-        #                     card_1 = hand[0]
-        #                     card_2 = hand[1]
-        #                     try:
-        #                         assert card_1[0] == card_2[0]
-        #                         for card in hand:
-        #                             self.multihand.append([card])
-        #                         self.hand = self.multihand
-        #                         self.hit_count = None
-        #                     except AssertionError:
-        #                         print('No doubles...')
+    def __init__(self):
+        super().__init__()
+
+    def __handsplit__(self):
+        for hand in self.hand:
+
+            if hit_count == 2:
+                for hand in self.hand:
+                    card_1 = hand[0]
+                    card_2 = hand[1]
+                    try:
+                        assert card_1[0] == card_2[0]
+                        for card in hand:
+                            self.multihand.append([card])
+                        self.hand = self.multihand
+                        self.hit_count = None
+                    except AssertionError:
+                        print('No doubles...')

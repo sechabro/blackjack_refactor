@@ -62,3 +62,11 @@ def test_BlackjackPerson_acevaluerefactor():
         '11', 'Ace', 'Clubs']], 'hand_value': 22, 'hit_count': 2}]
     b.__acevaluerefactor__()
     assert b.hand[0]["hand_value"] == 12
+
+
+def test_BlackjackPerson_acevaluerefactor_no_aces():
+    b = BlackjackPerson()
+    b.hand = [{'cards': [['10', 'Jack', 'Hearts'], [
+        '10', 'Queen', 'Clubs'], ['6', 'Hearts']], 'hand_value': 26, 'hit_count': 3}]
+    b.__acevaluerefactor__()
+    assert b.hand[0]["hand_value"] == 26

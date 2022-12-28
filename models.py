@@ -42,13 +42,11 @@ class Deck:
 class BlackjackPerson(Deck):
 
     def __init__(self):
-        hand_count = 1
-        empty_hand = {
+        self.hand = [{
             "cards": [],
             "hand_value": 0,
             "hit_count": 0
-        }
-        self.hand = [empty_hand]
+        }]
 
     def __hit__(self):
         for hand in self.hand:
@@ -76,7 +74,8 @@ class BlackjackPerson(Deck):
                     value = sum(int(card[0]) for card in cards)
                     hand["hand_value"] = value
                 else:
-                    print('No aces to refactor')
+                    pass
+            print(f'refactor complete. hand value is {hand["hand_value"]}')
 
 
 class Dealer(BlackjackPerson):
@@ -101,16 +100,34 @@ class Player(BlackjackPerson):
 
     def __handsplit__(self):
         for hand in self.hand:
+            if hand["hit_count"] == 2:
+                card_1 = hand["cards"][0]
+                card_2 = hand["cards"][1]
+                try:
+                    assert card_1[0] == card_2[0]
+                    self.hand.append(
+                        {"cards": [card_2], "hand_value": int(card_2[0]), "hit_count": 1})
+                    hand["cards"].remove(card_2)
+                except AssertionError:
+                    print('No doubles...')
 
-            if hit_count == 2:
-                for hand in self.hand:
-                    card_1 = hand[0]
-                    card_2 = hand[1]
-                    try:
-                        assert card_1[0] == card_2[0]
-                        for card in hand:
-                            self.multihand.append([card])
-                        self.hand = self.multihand
-                        self.hit_count = None
-                    except AssertionError:
-                        print('No doubles...')
+
+def test_run():
+    Deck.__deck__()
+    Deck.__card__()
+    b = BlackjackPerson()
+    Deck.__facecardnumvalueadd__()
+    b.__hit__()
+    Deck.__card__()
+    Deck.__facecardnumvalueadd__()
+    b.__hit__()
+    Deck.__card__()
+    Deck.__facecardnumvalueadd__()
+    b.__hit__()
+    b.__handvaluecount__()
+    b.__hitcount__()
+    b.__acevaluerefactor__()
+    print(b.hand)
+
+
+test_run()

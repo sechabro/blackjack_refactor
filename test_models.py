@@ -1,4 +1,4 @@
-from models import Deck, BlackjackPerson
+from models import Deck, BlackjackPerson, Player
 import itertools
 
 
@@ -70,3 +70,39 @@ def test_BlackjackPerson_acevaluerefactor_no_aces():
         '10', 'Queen', 'Clubs'], ['6', 'Hearts']], 'hand_value': 26, 'hit_count': 3}]
     b.__acevaluerefactor__()
     assert b.hand[0]["hand_value"] == 26
+
+
+def test_Player_handsplit_single_hand():
+    b = BlackjackPerson()
+    p = Player()
+    p.hand = [{
+        "cards": [['9', 'Spades'], ['9', 'Clubs']],
+        "hand_value": 18,
+        "hit_count": 2
+    }]
+    p.__handsplit__()
+    assert p.hand[1]["cards"][0] == ['9', 'Clubs']
+
+
+def test_Player_handsplit_multi_hand():
+    b = BlackjackPerson()
+    p = Player()
+    p.hand = [{
+        "cards": [['9', 'Spades'], ['8', 'Clubs']],
+        "hand_value": 17,
+        "hit_count": 2
+    },
+        {
+        "cards": [['7', 'Spades'], ['2', 'Clubs']],
+        "hand_value": 9,
+        "hit_count": 2
+    },
+        {
+        "cards": [['6', 'Spades'], ['6', 'Clubs']],
+        "hand_value": 18,
+        "hit_count": 2
+    }]
+    p.__handsplit__()
+    p.__handvaluecount__()
+    assert p.hand[2]["hand_value"] == 6
+    assert p.hand[3]["hand_value"] == 6

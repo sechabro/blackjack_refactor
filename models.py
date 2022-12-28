@@ -110,24 +110,3 @@ class Player(BlackjackPerson):
                     hand["cards"].remove(card_2)
                 except AssertionError:
                     print('No doubles...')
-
-
-def test_run():
-    Deck.__deck__()
-    Deck.__card__()
-    b = BlackjackPerson()
-    Deck.__facecardnumvalueadd__()
-    b.__hit__()
-    Deck.__card__()
-    Deck.__facecardnumvalueadd__()
-    b.__hit__()
-    Deck.__card__()
-    Deck.__facecardnumvalueadd__()
-    b.__hit__()
-    b.__handvaluecount__()
-    b.__hitcount__()
-    b.__acevaluerefactor__()
-    print(b.hand)
-
-
-test_run()
